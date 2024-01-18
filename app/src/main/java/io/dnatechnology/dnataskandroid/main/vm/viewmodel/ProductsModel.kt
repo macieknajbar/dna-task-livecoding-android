@@ -2,8 +2,8 @@ package io.dnatechnology.dnataskandroid.main.vm.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.dnatechnology.dnataskandroid.api.Product
-import io.dnatechnology.dnataskandroid.api.PurchaseApiClient
+import io.dnatechnology.dnataskandroid.api.purchase.Product
+import io.dnatechnology.dnataskandroid.api.purchase.PurchaseApiClient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

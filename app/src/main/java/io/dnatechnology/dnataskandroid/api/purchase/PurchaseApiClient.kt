@@ -1,11 +1,11 @@
-package io.dnatechnology.dnataskandroid.api
+package io.dnatechnology.dnataskandroid.api.purchase
 
-import io.dnatechnology.dnataskandroid.api.data.PurchaseCancelRequest
-import io.dnatechnology.dnataskandroid.api.data.PurchaseConfirmRequest
-import io.dnatechnology.dnataskandroid.api.data.PurchaseRequest
-import io.dnatechnology.dnataskandroid.api.data.PurchaseResponse
-import io.dnatechnology.dnataskandroid.api.data.PurchaseStatusResponse
-import io.dnatechnology.dnataskandroid.api.data.TransactionStatus
+import io.dnatechnology.dnataskandroid.api.purchase.model.PurchaseCancelRequest
+import io.dnatechnology.dnataskandroid.api.purchase.model.PurchaseConfirmRequest
+import io.dnatechnology.dnataskandroid.api.purchase.model.PurchaseRequest
+import io.dnatechnology.dnataskandroid.api.purchase.model.PurchaseResponse
+import io.dnatechnology.dnataskandroid.api.purchase.model.PurchaseStatusResponse
+import io.dnatechnology.dnataskandroid.api.purchase.model.TransactionStatusRemote
 import kotlinx.coroutines.delay
 import java.util.UUID
 
@@ -28,7 +28,7 @@ class PurchaseApiClient {
     suspend fun initiatePurchaseTransaction(purchaseRequest: PurchaseRequest): PurchaseResponse {
         delay(250)
         if (purchaseRequest.order.isEmpty()) {
-            return PurchaseResponse(purchaseRequest.order, UUID.randomUUID().toString(), TransactionStatus.FAILED)
+            return PurchaseResponse(purchaseRequest.order, UUID.randomUUID().toString(), TransactionStatusRemote.FAILED)
         }
 
         return try {
@@ -43,16 +43,16 @@ class PurchaseApiClient {
                 entry.value * orderedProduct.unitNetValue * (1.0 + orderedProduct.tax)
             }.sum()
 
-            PurchaseResponse(purchaseRequest.order, UUID.randomUUID().toString(), TransactionStatus.INITIATED)
+            PurchaseResponse(purchaseRequest.order, UUID.randomUUID().toString(), TransactionStatusRemote.INITIATED)
         } catch (e: Exception) {
-            PurchaseResponse(purchaseRequest.order, UUID.randomUUID().toString(), TransactionStatus.FAILED)
+            PurchaseResponse(purchaseRequest.order, UUID.randomUUID().toString(), TransactionStatusRemote.FAILED)
         }
     }
 
     suspend fun confirm(purchaseRequest: PurchaseConfirmRequest): PurchaseStatusResponse {
         delay(250)
         if (purchaseRequest.order.isEmpty()) {
-            return PurchaseStatusResponse(purchaseRequest.transactionID, TransactionStatus.FAILED)
+            return PurchaseStatusResponse(purchaseRequest.transactionID, TransactionStatusRemote.FAILED)
         }
 
         return try {
@@ -66,18 +66,18 @@ class PurchaseApiClient {
             }.sum()
 
             if (sum > 100.0) {
-                return PurchaseStatusResponse(purchaseRequest.transactionID, TransactionStatus.FAILED)
+                return PurchaseStatusResponse(purchaseRequest.transactionID, TransactionStatusRemote.FAILED)
             }
 
-            return PurchaseStatusResponse(purchaseRequest.transactionID, TransactionStatus.INITIATED)
+            return PurchaseStatusResponse(purchaseRequest.transactionID, TransactionStatusRemote.INITIATED)
         } catch (e: Exception) {
-            return PurchaseStatusResponse(purchaseRequest.transactionID, TransactionStatus.FAILED)
+            return PurchaseStatusResponse(purchaseRequest.transactionID, TransactionStatusRemote.FAILED)
         }
     }
 
     suspend fun cancel(purchaseRequest: PurchaseCancelRequest): PurchaseStatusResponse {
         delay(250)
-        return PurchaseStatusResponse(purchaseRequest.transactionID, TransactionStatus.CANCELLED)
+        return PurchaseStatusResponse(purchaseRequest.transactionID, TransactionStatusRemote.CANCELLED)
     }
 
 }

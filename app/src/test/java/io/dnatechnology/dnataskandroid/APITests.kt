@@ -1,12 +1,12 @@
 package io.dnatechnology.dnataskandroid
 
-import io.dnatechnology.dnataskandroid.api.PaymentApiClient
-import io.dnatechnology.dnataskandroid.api.PurchaseApiClient
-import io.dnatechnology.dnataskandroid.api.data.PaymentRequest
-import io.dnatechnology.dnataskandroid.api.data.PaymentStatus
-import io.dnatechnology.dnataskandroid.api.data.PurchaseConfirmRequest
-import io.dnatechnology.dnataskandroid.api.data.PurchaseRequest
-import io.dnatechnology.dnataskandroid.api.data.TransactionStatus
+import io.dnatechnology.dnataskandroid.api.payment.PaymentApiClient
+import io.dnatechnology.dnataskandroid.api.purchase.PurchaseApiClient
+import io.dnatechnology.dnataskandroid.api.payment.model.PaymentRequest
+import io.dnatechnology.dnataskandroid.api.payment.model.PaymentStatusRemote
+import io.dnatechnology.dnataskandroid.api.purchase.model.PurchaseConfirmRequest
+import io.dnatechnology.dnataskandroid.api.purchase.model.PurchaseRequest
+import io.dnatechnology.dnataskandroid.api.purchase.model.TransactionStatusRemote
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
@@ -29,7 +29,7 @@ class PaymentAPITests {
         val paymentResponse =  paymentAPI.pay(paymentRequest)
 
         // then
-        assertEquals(paymentResponse.status, PaymentStatus.SUCCESS)
+        assertEquals(paymentResponse.status, PaymentStatusRemote.SUCCESS)
     }
 
     @Test
@@ -46,7 +46,7 @@ class PaymentAPITests {
         val paymentResponse =  paymentAPI.pay(paymentRequest)
 
         // then
-        assertEquals(paymentResponse.status, PaymentStatus.FAILED)
+        assertEquals(paymentResponse.status, PaymentStatusRemote.FAILED)
     }
 
     @Test
@@ -63,7 +63,7 @@ class PaymentAPITests {
         val paymentResponse =  paymentAPI.pay(paymentRequest)
 
         // then
-        assertEquals(paymentResponse.status, PaymentStatus.FAILED)
+        assertEquals(paymentResponse.status, PaymentStatusRemote.FAILED)
     }
 
     @Test
@@ -80,7 +80,7 @@ class PaymentAPITests {
         val paymentResponse =  paymentAPI.revert(paymentRequest)
 
         // then
-        assertEquals(paymentResponse.status, PaymentStatus.SUCCESS)
+        assertEquals(paymentResponse.status, PaymentStatusRemote.SUCCESS)
     }
 
     @Test
@@ -97,7 +97,7 @@ class PaymentAPITests {
         val paymentResponse =  paymentAPI.revert(paymentRequest)
 
         // then
-        assertEquals(paymentResponse.status, PaymentStatus.FAILED)
+        assertEquals(paymentResponse.status, PaymentStatusRemote.FAILED)
     }
 }
 
@@ -124,7 +124,7 @@ class PurchaseAPITests {
         val purchaseResponse =  purchaseApiClient.initiatePurchaseTransaction(purchaseRequest)
 
         // then
-        assertEquals(purchaseResponse.transactionStatus, TransactionStatus.FAILED)
+        assertEquals(purchaseResponse.transactionStatus, TransactionStatusRemote.FAILED)
     }
 
     @Test
@@ -138,7 +138,7 @@ class PurchaseAPITests {
         val purchaseResponse =  purchaseApiClient.initiatePurchaseTransaction(purchaseRequest)
 
         // then
-        assertEquals(purchaseResponse.transactionStatus, TransactionStatus.FAILED)
+        assertEquals(purchaseResponse.transactionStatus, TransactionStatusRemote.FAILED)
     }
 
     @Test
@@ -152,7 +152,7 @@ class PurchaseAPITests {
         val purchaseResponse =  purchaseApiClient.initiatePurchaseTransaction(purchaseRequest)
 
         // then
-        assertEquals(purchaseResponse.transactionStatus, TransactionStatus.FAILED)
+        assertEquals(purchaseResponse.transactionStatus, TransactionStatusRemote.FAILED)
     }
 
     @Test
@@ -167,6 +167,6 @@ class PurchaseAPITests {
         val purchaseResponse =  purchaseApiClient.confirm(purchaseRequest)
 
         // then
-        assertEquals(purchaseResponse.status, TransactionStatus.FAILED)
+        assertEquals(purchaseResponse.status, TransactionStatusRemote.FAILED)
     }
 }
