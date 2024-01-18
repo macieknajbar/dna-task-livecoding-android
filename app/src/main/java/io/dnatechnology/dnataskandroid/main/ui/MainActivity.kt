@@ -25,8 +25,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.dnatechnology.dnataskandroid.R
-import io.dnatechnology.dnataskandroid.api.purchase.Product
-import io.dnatechnology.dnataskandroid.main.vm.viewmodel.MainViewModel
+import io.dnatechnology.dnataskandroid.main.di.MainDI
+import io.dnatechnology.dnataskandroid.main.model.ProductModel
+import io.dnatechnology.dnataskandroid.main.vm.MainViewModel
 import io.dnatechnology.dnataskandroid.theme.Black
 import io.dnatechnology.dnataskandroid.theme.DNATaskAndroidTheme
 import io.dnatechnology.dnataskandroid.theme.MainBackground
@@ -35,7 +36,7 @@ import io.dnatechnology.dnataskandroid.utils.viewModel
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainViewModel by viewModel(::MainViewModel)
+    private val viewModel: MainViewModel by viewModel(MainDI::mainViewModel)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +46,14 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MainBackground
-                ) { ProductsView(viewModel = viewModel) }
+                ) {
+                    viewModel.viewState.collectAsState(initial = null).value?.let {
+                        ProductsView(
+                            viewState = it,
+                            onItemClicked = viewModel::addToCart,
+                        )
+                    }
+                }
             }
         }
     }
@@ -53,39 +61,39 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ProductsView(
-    viewModel: MainViewModel,
-    products: List<Product>? = viewModel.products.collectAsState().value,
+    viewState: MainViewModel.ViewState,
+    onItemClicked: (String) -> Unit = {},
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        when (products) {
-            null -> Text(text = "LOADING")
-            else -> {
-                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    for (product in products) {
-                        item {
-                            Row(modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
-                                .padding(bottom = 8.dp)
-                                .background(White)
-                                .border(1.dp, Black)
-                                .clickable {
-                                    viewModel.addToCart(product.productID)
-                                }) {
-                                Text(
-                                    text = product.toString(),
-                                    color = Black,
-                                    fontSize = 16.sp,
-                                    modifier = Modifier
-                                        .padding(horizontal = 8.dp)
-                                        .padding(vertical = 8.dp)
-                                )
-                            }
-                        }
+        Text(
+            modifier = Modifier.align(Alignment.TopCenter),
+            text = "LOADING",
+        ).takeIf { viewState.isLoadingVisible }
+
+        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            for (product in viewState.products) {
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 8.dp)
+                            .background(White)
+                            .border(1.dp, Black)
+                            .clickable { onItemClicked(product.id) },
+                    ) {
+                        Text(
+                            text = product.text,
+                            color = Black,
+                            fontSize = 16.sp,
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .padding(vertical = 8.dp)
+                        )
                     }
                 }
             }
-        }
+        }.takeUnless { viewState.isLoadingVisible }
 
         Row(
             Modifier
@@ -96,7 +104,7 @@ fun ProductsView(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = stringResource(R.string.pay), color = Black)
+            Text(text = stringResource(R.string.pay) + viewState.payButtonText, color = Black)
         }
     }
 }
@@ -104,5 +112,15 @@ fun ProductsView(
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    ProductsView(viewModel = MainViewModel())
+    ProductsView(
+        viewState = MainViewModel.ViewState(
+            products = listOf(
+                ProductModel("1", "Item 1"),
+                ProductModel("2", "Item 2"),
+                ProductModel("3", "Item 3"),
+            ),
+            isLoadingVisible = false,
+            payButtonText = " (2)"
+        ),
+    )
 }

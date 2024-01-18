@@ -1,7 +1,7 @@
 package io.dnatechnology.dnataskandroid
 
 import io.dnatechnology.dnataskandroid.api.payment.PaymentApiClient
-import io.dnatechnology.dnataskandroid.api.purchase.PurchaseApiClient
+import io.dnatechnology.dnataskandroid.api.purchase.ThePurchaseApiClient
 import io.dnatechnology.dnataskandroid.api.payment.model.PaymentRequest
 import io.dnatechnology.dnataskandroid.api.payment.model.PaymentStatusRemote
 import io.dnatechnology.dnataskandroid.api.purchase.model.PurchaseConfirmRequest
@@ -102,7 +102,7 @@ class PaymentAPITests {
 }
 
 class PurchaseAPITests {
-    private val purchaseApiClient = PurchaseApiClient()
+    private val purchaseApiClient = ThePurchaseApiClient()
 
     @Test
     fun whenGetProductsThenSuccess() = runBlocking {

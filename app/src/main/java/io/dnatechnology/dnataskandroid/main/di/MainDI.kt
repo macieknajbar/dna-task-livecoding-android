@@ -1,9 +1,12 @@
 package io.dnatechnology.dnataskandroid.main.di
 
-import io.dnatechnology.dnataskandroid.api.purchase.PurchaseApiClient
-import io.dnatechnology.dnataskandroid.main.vm.viewmodel.MainViewModel
+import io.dnatechnology.dnataskandroid.api.purchase.ThePurchaseApiClient
+import io.dnatechnology.dnataskandroid.main.vm.MainViewModel
 
-fun mainViewModel() =
-    MainViewModel(
-        purchaseApiClient = PurchaseApiClient(),
-    )
+object MainDI {
+
+    fun mainViewModel() =
+        MainViewModel(
+            purchaseApiClient = ThePurchaseApiClient(),
+        )
+}
