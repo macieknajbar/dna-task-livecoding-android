@@ -1,4 +1,4 @@
-package io.dnatechnology.dnataskandroid.ui.theme
+package io.dnatechnology.dnataskandroid.theme
 
 import androidx.compose.ui.graphics.Color
 

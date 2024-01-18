@@ -1,8 +1,13 @@
-package io.dnatechnology.dnataskandroid.ui.api
+package io.dnatechnology.dnataskandroid.api
 
-import io.dnatechnology.dnataskandroid.ui.api.data.*
+import io.dnatechnology.dnataskandroid.api.data.PurchaseCancelRequest
+import io.dnatechnology.dnataskandroid.api.data.PurchaseConfirmRequest
+import io.dnatechnology.dnataskandroid.api.data.PurchaseRequest
+import io.dnatechnology.dnataskandroid.api.data.PurchaseResponse
+import io.dnatechnology.dnataskandroid.api.data.PurchaseStatusResponse
+import io.dnatechnology.dnataskandroid.api.data.TransactionStatus
 import kotlinx.coroutines.delay
-import java.util.*
+import java.util.UUID
 
 class PurchaseApiClient {
     companion object {

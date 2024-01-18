@@ -1,8 +1,12 @@
 package io.dnatechnology.dnataskandroid
 
-import io.dnatechnology.dnataskandroid.ui.api.PaymentApiClient
-import io.dnatechnology.dnataskandroid.ui.api.PurchaseApiClient
-import io.dnatechnology.dnataskandroid.ui.api.data.*
+import io.dnatechnology.dnataskandroid.api.PaymentApiClient
+import io.dnatechnology.dnataskandroid.api.PurchaseApiClient
+import io.dnatechnology.dnataskandroid.api.data.PaymentRequest
+import io.dnatechnology.dnataskandroid.api.data.PaymentStatus
+import io.dnatechnology.dnataskandroid.api.data.PurchaseConfirmRequest
+import io.dnatechnology.dnataskandroid.api.data.PurchaseRequest
+import io.dnatechnology.dnataskandroid.api.data.TransactionStatus
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package io.dnatechnology.dnataskandroid.ui.viewmodel
+package io.dnatechnology.dnataskandroid.main.features.payment
 
 class PaymentModel {
 

@@ -1,4 +1,4 @@
-package io.dnatechnology.dnataskandroid.ui
+package io.dnatechnology.dnataskandroid.main.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -7,7 +7,13 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,11 +25,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.dnatechnology.dnataskandroid.ui.theme.Black
-import io.dnatechnology.dnataskandroid.ui.theme.DNATaskAndroidTheme
-import io.dnatechnology.dnataskandroid.ui.theme.MainBackground
-import io.dnatechnology.dnataskandroid.ui.theme.White
-import io.dnatechnology.dnataskandroid.ui.viewmodel.ProductsModel
+import io.dnatechnology.dnataskandroid.R
+import io.dnatechnology.dnataskandroid.main.vm.viewmodel.ProductsModel
+import io.dnatechnology.dnataskandroid.theme.Black
+import io.dnatechnology.dnataskandroid.theme.DNATaskAndroidTheme
+import io.dnatechnology.dnataskandroid.theme.MainBackground
+import io.dnatechnology.dnataskandroid.theme.White
 
 class RootComposeActivity : ComponentActivity() {
 
@@ -96,7 +103,7 @@ fun ProductsView(productsModel: ProductsModel) {
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = stringResource(io.dnatechnology.dnataskandroid.R.string.pay), color = Black)
+                Text(text = stringResource(R.string.pay), color = Black)
             }
         }
     }

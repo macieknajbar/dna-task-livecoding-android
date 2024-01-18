@@ -1,8 +1,9 @@
-package io.dnatechnology.dnataskandroid.ui.cardReader
+package io.dnatechnology.dnataskandroid.cardReader
 
 import kotlinx.coroutines.delay
-import java.util.*
+import java.util.Calendar
 import java.util.Calendar.SECOND
+import java.util.UUID
 
 class CardReaderService {
 

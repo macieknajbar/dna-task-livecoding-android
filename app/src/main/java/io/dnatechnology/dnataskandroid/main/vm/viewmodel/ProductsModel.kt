@@ -1,14 +1,12 @@
-package io.dnatechnology.dnataskandroid.ui.viewmodel
+package io.dnatechnology.dnataskandroid.main.vm.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.dnatechnology.dnataskandroid.ui.api.Product
-import io.dnatechnology.dnataskandroid.ui.api.PurchaseApiClient
+import io.dnatechnology.dnataskandroid.api.Product
+import io.dnatechnology.dnataskandroid.api.PurchaseApiClient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.*
 
 class ProductsModel: ViewModel() {
 

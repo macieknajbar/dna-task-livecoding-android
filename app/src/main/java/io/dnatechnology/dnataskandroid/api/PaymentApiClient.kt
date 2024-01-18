@@ -1,8 +1,8 @@
-package io.dnatechnology.dnataskandroid.ui.api
+package io.dnatechnology.dnataskandroid.api
 
-import io.dnatechnology.dnataskandroid.ui.api.data.PaymentRequest
-import io.dnatechnology.dnataskandroid.ui.api.data.PaymentResponse
-import io.dnatechnology.dnataskandroid.ui.api.data.PaymentStatus
+import io.dnatechnology.dnataskandroid.api.data.PaymentRequest
+import io.dnatechnology.dnataskandroid.api.data.PaymentResponse
+import io.dnatechnology.dnataskandroid.api.data.PaymentStatus
 import kotlinx.coroutines.delay
 
 class PaymentApiClient {

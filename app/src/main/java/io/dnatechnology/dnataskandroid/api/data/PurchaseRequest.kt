@@ -1,4 +1,4 @@
-package io.dnatechnology.dnataskandroid.ui.api.data
+package io.dnatechnology.dnataskandroid.api.data
 
 data class PurchaseRequest(val order: Map<String,Long>)
 
