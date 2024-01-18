@@ -8,17 +8,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class MainViewModel: ViewModel() {
+class MainViewModel(
+    private val purchaseApiClient: PurchaseApiClient = PurchaseApiClient(),
+): ViewModel() {
 
-    val purchaseApiClient: PurchaseApiClient = PurchaseApiClient()
+    private val mutableCart = MutableStateFlow<Map<String, Long>>(mapOf())
+    val cart: StateFlow<Map<String, Long>> = mutableCart
 
-    private var mutableCart = MutableStateFlow<Map<String, Long>>(mapOf())
-    var cart: StateFlow<Map<String, Long>> = mutableCart
+    private val mutableProducts = MutableStateFlow<List<Product>?>(null)
+    val products: StateFlow<List<Product>?> = mutableProducts
 
-    private var mutableProducts = MutableStateFlow<List<Product>?>(null)
-    var products: StateFlow<List<Product>?> = mutableProducts
-
-    fun getProducts() {
+    init {
         viewModelScope.launch {
             mutableProducts.value = purchaseApiClient.getProducts()
         }
