@@ -56,49 +56,47 @@ fun ProductsView(
     viewModel: MainViewModel,
     products: List<Product>? = viewModel.products.collectAsState().value,
 ) {
-    DNATaskAndroidTheme {
-        Box(modifier = Modifier.fillMaxSize()) {
-            when (products) {
-                null -> Text(text = "LOADING")
-                else -> {
-                    LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        for (product in products) {
-                            item {
-                                Row(modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp)
-                                    .padding(bottom = 8.dp)
-                                    .background(White)
-                                    .border(1.dp, Black)
-                                    .clickable {
-                                        viewModel.addToCart(product.productID)
-                                    }) {
-                                    Text(
-                                        text = product.toString(),
-                                        color = Black,
-                                        fontSize = 16.sp,
-                                        modifier = Modifier
-                                            .padding(horizontal = 8.dp)
-                                            .padding(vertical = 8.dp)
-                                    )
-                                }
+    Box(modifier = Modifier.fillMaxSize()) {
+        when (products) {
+            null -> Text(text = "LOADING")
+            else -> {
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    for (product in products) {
+                        item {
+                            Row(modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .padding(bottom = 8.dp)
+                                .background(White)
+                                .border(1.dp, Black)
+                                .clickable {
+                                    viewModel.addToCart(product.productID)
+                                }) {
+                                Text(
+                                    text = product.toString(),
+                                    color = Black,
+                                    fontSize = 16.sp,
+                                    modifier = Modifier
+                                        .padding(horizontal = 8.dp)
+                                        .padding(vertical = 8.dp)
+                                )
                             }
                         }
                     }
                 }
             }
+        }
 
-            Row(
-                Modifier
-                    .align(Alignment.BottomCenter)
-                    .background(White)
-                    .fillMaxWidth()
-                    .height(50.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = stringResource(R.string.pay), color = Black)
-            }
+        Row(
+            Modifier
+                .align(Alignment.BottomCenter)
+                .background(White)
+                .fillMaxWidth()
+                .height(50.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = stringResource(R.string.pay), color = Black)
         }
     }
 }
@@ -106,7 +104,5 @@ fun ProductsView(
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    DNATaskAndroidTheme {
-        ProductsView(viewModel = MainViewModel())
-    }
+    ProductsView(viewModel = MainViewModel())
 }
