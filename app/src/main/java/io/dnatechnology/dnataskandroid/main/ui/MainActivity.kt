@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.dnatechnology.dnataskandroid.R
-import io.dnatechnology.dnataskandroid.main.vm.viewmodel.ProductsModel
+import io.dnatechnology.dnataskandroid.main.vm.viewmodel.MainViewModel
 import io.dnatechnology.dnataskandroid.theme.Black
 import io.dnatechnology.dnataskandroid.theme.DNATaskAndroidTheme
 import io.dnatechnology.dnataskandroid.theme.MainBackground
@@ -34,7 +34,7 @@ import io.dnatechnology.dnataskandroid.theme.White
 
 class RootComposeActivity : ComponentActivity() {
 
-    private val productsModel: ProductsModel by viewModels<ProductsModel>()
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +44,7 @@ class RootComposeActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MainBackground
                 ) {
-                    ProductsView(productsModel = productsModel)
+                    ProductsView(viewModel = viewModel)
                 }
             }
         }
@@ -52,13 +52,13 @@ class RootComposeActivity : ComponentActivity() {
 }
 
 @Composable
-fun ProductsView(productsModel: ProductsModel) {
+fun ProductsView(viewModel: MainViewModel) {
     DNATaskAndroidTheme {
         LaunchedEffect(Unit) {
-            productsModel.getProducts()
+            viewModel.getProducts()
         }
 
-        val products = productsModel.products.collectAsState().value
+        val products = viewModel.products.collectAsState().value
 
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -76,7 +76,7 @@ fun ProductsView(productsModel: ProductsModel) {
                                 .background(White)
                                 .border(1.dp, Black)
                                 .clickable {
-                                    productsModel.addToCart(product.productID)
+                                    viewModel.addToCart(product.productID)
                                 }
                         ) {
                             Text(
@@ -113,6 +113,6 @@ fun ProductsView(productsModel: ProductsModel) {
 @Composable
 fun DefaultPreview() {
     DNATaskAndroidTheme {
-        ProductsView(productsModel = ProductsModel())
+        ProductsView(viewModel = MainViewModel())
     }
 }
