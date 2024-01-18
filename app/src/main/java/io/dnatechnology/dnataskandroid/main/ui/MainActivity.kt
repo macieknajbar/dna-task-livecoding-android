@@ -3,7 +3,6 @@ package io.dnatechnology.dnataskandroid.main.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -31,10 +30,11 @@ import io.dnatechnology.dnataskandroid.theme.Black
 import io.dnatechnology.dnataskandroid.theme.DNATaskAndroidTheme
 import io.dnatechnology.dnataskandroid.theme.MainBackground
 import io.dnatechnology.dnataskandroid.theme.White
+import io.dnatechnology.dnataskandroid.utils.viewModel
 
-class RootComposeActivity : ComponentActivity() {
+class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModel(::MainViewModel)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
