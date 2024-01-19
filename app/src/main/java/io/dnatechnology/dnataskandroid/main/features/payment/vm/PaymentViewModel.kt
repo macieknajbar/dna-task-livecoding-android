@@ -10,8 +10,9 @@ import io.dnatechnology.dnataskandroid.api.purchase.model.ProductRemote
 import io.dnatechnology.dnataskandroid.api.purchase.model.PurchaseCancelRequest
 import io.dnatechnology.dnataskandroid.api.purchase.model.PurchaseConfirmRequest
 import io.dnatechnology.dnataskandroid.api.purchase.model.PurchaseRequest
-import io.dnatechnology.dnataskandroid.api.purchase.model.PurchaseResponse
 import io.dnatechnology.dnataskandroid.api.purchase.model.TransactionStatusRemote
+import io.dnatechnology.dnataskandroid.cardReader.CardReaderException
+import io.dnatechnology.dnataskandroid.cardReader.CardReaderService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
@@ -20,6 +21,7 @@ class PaymentViewModel(
     private val holder: Holder,
     private val purchaseApiClient: PurchaseApiClient,
     private val paymentApiClient: PaymentApiClient,
+    private val cardReaderService: CardReaderService,
 ) : ViewModel() {
 
     val effect: MutableStateFlow<Effect?> = MutableStateFlow(null)
@@ -38,7 +40,11 @@ class PaymentViewModel(
                     .apply(::println)
 
             when (val status = purchaseResponse.transactionStatus) {
-                TransactionStatusRemote.INITIATED -> pay(purchaseResponse.transactionID, orderedProducts)
+                TransactionStatusRemote.INITIATED -> pay(
+                    purchaseResponse.transactionID,
+                    orderedProducts
+                )
+
                 else -> handleStatus(status)
             }
         }
@@ -48,6 +54,18 @@ class PaymentViewModel(
         transactionID: String,
         orderedProducts: Map<ProductRemote, Long>,
     ) {
+        val cardData = try {
+            cardReaderService.readCard()
+        } catch (e: CardReaderException) {
+            effect.value = Effect.CardIssue
+            purchaseApiClient
+                .cancel(PurchaseCancelRequest(transactionID = transactionID))
+                .apply(::println)
+                .status
+                .let(::handleStatus)
+            return
+        }
+
         val response = paymentApiClient.pay(
             PaymentRequest(
                 transactionID = transactionID,
@@ -59,7 +77,7 @@ class PaymentViewModel(
                             .toDouble()
                     }.sum(),
                 currency = orderedProducts.keys.first().unitValueCurrency,
-                cardToken = "#token",
+                cardToken = cardData.token,
             )
         )
 
@@ -118,5 +136,6 @@ class PaymentViewModel(
         object PurchaseSuccessful : Effect()
         object PurchaseFailed : Effect()
         object PurchaseCancelled : Effect()
+        object CardIssue : Effect()
     }
 }

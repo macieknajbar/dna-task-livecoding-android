@@ -7,4 +7,5 @@
     <string name="purchase_successful">Purchase Successful</string>
     <string name="purchase_failed">Purchase Failed</string>
     <string name="purchase_cancelled">Purchase Cancelled</string>
+    <string name="purchase_card_issue">Card Issue</string>
 </resources>
