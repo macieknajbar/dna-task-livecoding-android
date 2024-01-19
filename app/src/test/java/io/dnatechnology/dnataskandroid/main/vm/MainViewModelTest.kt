@@ -2,11 +2,8 @@ package io.dnatechnology.dnataskandroid.main.vm
 
 import io.dnatechnology.dnataskandroid.api.purchase.PurchaseApiClient
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.setMain
-import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.argumentCaptor

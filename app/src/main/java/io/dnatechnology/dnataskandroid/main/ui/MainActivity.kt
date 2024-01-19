@@ -14,12 +14,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,6 +56,7 @@ class MainActivity : ComponentActivity() {
                         ProductsView(
                             viewState = it,
                             onItemClicked = viewModel::addToCart,
+                            onRemoveItemClicked = viewModel::removeFromCart,
                         )
                     }
                 }
@@ -63,37 +69,52 @@ class MainActivity : ComponentActivity() {
 fun ProductsView(
     viewState: MainViewModel.ViewState,
     onItemClicked: (String) -> Unit = {},
+    onRemoveItemClicked: (String) -> Unit = {},
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        Text(
-            modifier = Modifier.align(Alignment.TopCenter),
-            text = "LOADING",
-        ).takeIf { viewState.isLoadingVisible }
+        if (viewState.isLoadingVisible) {
+            Text(
+                modifier = Modifier.align(Alignment.TopCenter),
+                text = "LOADING",
+            )
+        } else {
 
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            for (product in viewState.products) {
-                item {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .padding(bottom = 8.dp)
-                            .background(White)
-                            .border(1.dp, Black)
-                            .clickable { onItemClicked(product.id) },
-                    ) {
-                        Text(
-                            text = product.text,
-                            color = Black,
-                            fontSize = 16.sp,
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                viewState.products.map { product ->
+                    item {
+                        Row(
                             modifier = Modifier
-                                .padding(horizontal = 8.dp)
-                                .padding(vertical = 8.dp)
-                        )
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .padding(bottom = 8.dp)
+                                .background(White)
+                                .border(1.dp, Black)
+                                .clickable { onItemClicked(product.id) },
+                        ) {
+                            Text(
+                                text = product.text,
+                                color = Black,
+                                fontSize = 16.sp,
+                                modifier = Modifier
+                                    .padding(horizontal = 8.dp)
+                                    .padding(vertical = 8.dp)
+                                    .weight(1f)
+                            )
+                            if (product.isRemoveIconVisible) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    tint = Color.Black,
+                                    contentDescription = "Remove",
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .clickable { onRemoveItemClicked(product.id) }
+                                )
+                            }
+                        }
                     }
                 }
             }
-        }.takeUnless { viewState.isLoadingVisible }
+        }
 
         Row(
             Modifier
@@ -115,12 +136,12 @@ fun DefaultPreview() {
     ProductsView(
         viewState = MainViewModel.ViewState(
             products = listOf(
-                ProductModel("1", "Item 1"),
-                ProductModel("2", "Item 2"),
-                ProductModel("3", "Item 3"),
+                ProductModel("1", "Item 1", false),
+                ProductModel("2", "Item 2", false),
+                ProductModel("3", "Item 3", true),
             ),
             isLoadingVisible = false,
-            payButtonText = " (2)"
+            payButtonText = " (2)",
         ),
     )
 }

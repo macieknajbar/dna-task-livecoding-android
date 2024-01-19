@@ -13,7 +13,7 @@ class ThePurchaseApiClient : PurchaseApiClient {
     companion object {
         val productList = listOf(
             Product("12345", "Big soda",123, 2.99, "EUR", 0.22),
-            Product("12346", "Medium soda", 30, 1.95, "EUR", 0.22),
+            Product("12346", "Medium soda", 3, 1.95, "EUR", 0.22),
             Product("12347", "Small soda",1000, 1.25, "EUR", 0.22),
             Product("12348", "Chips",2000, 4.33, "EUR", 0.22),
             Product("12349", "Snack bar", 0, 10.99, "EUR", 0.23),
