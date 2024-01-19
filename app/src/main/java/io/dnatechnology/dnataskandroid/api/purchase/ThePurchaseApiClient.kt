@@ -1,5 +1,6 @@
 package io.dnatechnology.dnataskandroid.api.purchase
 
+import io.dnatechnology.dnataskandroid.api.purchase.model.ProductRemote
 import io.dnatechnology.dnataskandroid.api.purchase.model.PurchaseCancelRequest
 import io.dnatechnology.dnataskandroid.api.purchase.model.PurchaseConfirmRequest
 import io.dnatechnology.dnataskandroid.api.purchase.model.PurchaseRequest
@@ -12,15 +13,15 @@ import java.util.UUID
 class ThePurchaseApiClient : PurchaseApiClient {
     companion object {
         val productList = listOf(
-            Product("12345", "Big soda",123, 2.99, "EUR", 0.22),
-            Product("12346", "Medium soda", 3, 1.95, "EUR", 0.22),
-            Product("12347", "Small soda",1000, 1.25, "EUR", 0.22),
-            Product("12348", "Chips",2000, 4.33, "EUR", 0.22),
-            Product("12349", "Snack bar", 0, 10.99, "EUR", 0.23),
+            ProductRemote("12345", "Big soda",123, 2.99, "EUR", 0.22),
+            ProductRemote("12346", "Medium soda", 3, 1.95, "EUR", 0.22),
+            ProductRemote("12347", "Small soda",1000, 1.25, "EUR", 0.22),
+            ProductRemote("12348", "Chips",2000, 4.33, "EUR", 0.22),
+            ProductRemote("12349", "Snack bar", 0, 10.99, "EUR", 0.23),
         )
     }
 
-    override suspend fun getProducts(): List<Product> {
+    override suspend fun getProducts(): List<ProductRemote> {
         delay(300)
         return productList
     }
@@ -69,7 +70,7 @@ class ThePurchaseApiClient : PurchaseApiClient {
                 return PurchaseStatusResponse(purchaseRequest.transactionID, TransactionStatusRemote.FAILED)
             }
 
-            return PurchaseStatusResponse(purchaseRequest.transactionID, TransactionStatusRemote.INITIATED)
+            return PurchaseStatusResponse(purchaseRequest.transactionID, TransactionStatusRemote.CONFIRMED)
         } catch (e: Exception) {
             return PurchaseStatusResponse(purchaseRequest.transactionID, TransactionStatusRemote.FAILED)
         }
@@ -80,23 +81,4 @@ class ThePurchaseApiClient : PurchaseApiClient {
         return PurchaseStatusResponse(purchaseRequest.transactionID, TransactionStatusRemote.CANCELLED)
     }
 
-}
-
-/**
- * productID - globally unique product identifier
- * name - display name
- * maxAmount - available quantity of the product
- * unitNetValue - net value of a single item
- * unitValueCurrency - currency name
- * tax - tax to be added to the net value
- */
-data class Product(val productID: String,
-                   val name: String,
-                   val maxAmount: Long,
-                   val unitNetValue: Double,
-                   val unitValueCurrency: String,
-                   val tax: Double) {
-    override fun toString(): String {
-        return String.format("%s [ %.2f %s ]", name, unitNetValue * (1.0+ tax), unitValueCurrency)
-    }
 }

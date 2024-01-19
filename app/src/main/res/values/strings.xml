@@ -3,4 +3,8 @@
     <string name="main_button_view_based">View based</string>
     <string name="main_button_compose_based">Compose based</string>
     <string name="pay">Pay</string>
+
+    <string name="purchase_successful">Purchase Successful</string>
+    <string name="purchase_failed">Purchase Failed</string>
+    <string name="purchase_cancelled">Purchase Cancelled</string>
 </resources>

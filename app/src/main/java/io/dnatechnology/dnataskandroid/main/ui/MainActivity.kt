@@ -1,6 +1,8 @@
 package io.dnatechnology.dnataskandroid.main.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -24,13 +26,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
 import io.dnatechnology.dnataskandroid.R
 import io.dnatechnology.dnataskandroid.main.di.MainDI
+import io.dnatechnology.dnataskandroid.main.features.payment.ui.PaymentActivity
 import io.dnatechnology.dnataskandroid.main.model.ProductModel
 import io.dnatechnology.dnataskandroid.main.vm.MainViewModel
 import io.dnatechnology.dnataskandroid.theme.Black
@@ -38,6 +41,8 @@ import io.dnatechnology.dnataskandroid.theme.DNATaskAndroidTheme
 import io.dnatechnology.dnataskandroid.theme.MainBackground
 import io.dnatechnology.dnataskandroid.theme.White
 import io.dnatechnology.dnataskandroid.utils.viewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
@@ -45,6 +50,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        initEffectsHandler()
 
         setContent {
             DNATaskAndroidTheme {
@@ -57,9 +64,39 @@ class MainActivity : ComponentActivity() {
                             viewState = it,
                             onItemClicked = viewModel::addToCart,
                             onRemoveItemClicked = viewModel::removeFromCart,
+                            onPayClicked = viewModel::onPayClicked,
                         )
                     }
                 }
+            }
+        }
+    }
+
+    private fun initEffectsHandler() = lifecycleScope.launch {
+        viewModel.effect.collectLatest {
+            when (it) {
+                null -> Unit
+
+                is MainViewModel.Effect.GoToPaymentScreen -> {
+                    startActivity(
+                        Intent(this@MainActivity, PaymentActivity::class.java)
+                            .putExtra(
+                                PaymentActivity.EXTRA_ORDER_ITEMS,
+                                it.orderItems.toTypedArray()
+                            )
+                            .putExtra(
+                                PaymentActivity.EXTRA_ITEM_AMOUNTS,
+                                it.itemAmounts.toLongArray()
+                            )
+                    )
+                }
+
+                MainViewModel.Effect.ItemMaxedOut ->
+                    Toast.makeText(this@MainActivity, "Item maxed out", Toast.LENGTH_SHORT)
+                        .show()
+
+                MainViewModel.Effect.EmptyCart ->
+                    Toast.makeText(this@MainActivity, "Empty cart", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -70,6 +107,7 @@ fun ProductsView(
     viewState: MainViewModel.ViewState,
     onItemClicked: (String) -> Unit = {},
     onRemoveItemClicked: (String) -> Unit = {},
+    onPayClicked: () -> Unit = {},
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         if (viewState.isLoadingVisible) {
@@ -125,7 +163,11 @@ fun ProductsView(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = stringResource(R.string.pay) + viewState.payButtonText, color = Black)
+            Text(
+                text = stringResource(R.string.pay) + viewState.payButtonText,
+                color = Black,
+                modifier = Modifier.clickable { onPayClicked() }
+            )
         }
     }
 }
