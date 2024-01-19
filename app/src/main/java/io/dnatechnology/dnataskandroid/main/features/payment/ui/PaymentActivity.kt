@@ -6,10 +6,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import io.dnatechnology.dnataskandroid.R
 import io.dnatechnology.dnataskandroid.main.features.payment.di.PaymentDI
@@ -76,13 +81,9 @@ class PaymentActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MainBackground
                 ) {
-                    Row(modifier = Modifier.fillMaxSize()) {
-                        Text(
-                            text = "Initializing payment",
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
+                    CircularProgressIndicator(
+                        color = MaterialTheme.colors.onSecondary,
+                    )
                 }
             }
         }
