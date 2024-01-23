@@ -16,7 +16,7 @@ class MainViewModel(
     private val mainViewStateMapper: MainViewStateMapper = MainViewStateMapper(),
 ) : ViewModel() {
 
-    private val state = MutableStateFlow(State())
+    val state = MutableStateFlow(State())
     val viewState = state.map(mainViewStateMapper::map)
 
     val effect: MutableStateFlow<Effect?> = MutableStateFlow(null)
